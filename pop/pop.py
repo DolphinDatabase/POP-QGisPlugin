@@ -21,15 +21,19 @@
  *                                                                         *
  ***************************************************************************/
 """
-from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication
+from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication, Qt
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction
+from qgis.core import QgsProject,QgsVectorLayer,QgsRasterLayer
 
 # Initialize Qt resources from file resources.py
 from .resources import *
 # Import the code for the dialog
-from .pop_dialog import POPDialog
+from .interface.login.login_dialog import loginDialog
+from .interface.tool.tool_widget import toolWidget
 import os.path
+
+from PyQt5.QtCore import QSettings
 
 
 class POP:
@@ -43,11 +47,8 @@ class POP:
             application at run time.
         :type iface: QgsInterface
         """
-        # Save reference to the QGIS interface
         self.iface = iface
-        # initialize plugin directory
         self.plugin_dir = os.path.dirname(__file__)
-        # initialize locale
         locale = QSettings().value('locale/userLocale')[0:2]
         locale_path = os.path.join(
             self.plugin_dir,
@@ -59,13 +60,13 @@ class POP:
             self.translator.load(locale_path)
             QCoreApplication.installTranslator(self.translator)
 
-        # Declare instance attributes
         self.actions = []
         self.menu = self.tr(u'&POP')
 
-        # Check if plugin was started the first time in current QGIS session
-        # Must be set in initGui() to survive plugin reloads
         self.first_start = None
+        self.pluginIsActive = False
+        self.dockwidget = None
+
 
     # noinspection PyMethodMayBeStatic
     def tr(self, message):
@@ -179,22 +180,37 @@ class POP:
                 action)
             self.iface.removeToolBarIcon(action)
 
+    def onClosePlugin(self):
+        """Cleanup necessary items here when plugin dockwidget is closed"""
+        self.dockwidget.closingPlugin.disconnect(self.onClosePlugin)
+        QSettings('POP','auth').remove('jwt')
+        self.dockwidget = None
+        self.first_start = True
+        self.pluginIsActive = False
+
 
     def run(self):
         """Run method that performs all the real work"""
 
-        # Create the dialog with elements (after translation) and keep reference
-        # Only create GUI ONCE in callback, so that it will only load when the plugin is started
         if self.first_start == True:
+            #url = "type=xyz&url=https://mt1.google.com/vt/lyrs%3Ds%26x%3D%7Bx%7D%26y%3D%7By%7D%26z%3D%7Bz%7D&zmax=18&zmin=0&http-header:referer="
+            #r_layer = QgsRasterLayer(url, 'POP-Map', 'wms')
+            #if r_layer.isValid():
+            #    QgsProject.instance().addMapLayer(r_layer)
+            #else:
+            #    print("layer invalid")
             self.first_start = False
-            self.dlg = POPDialog()
-
-        # show the dialog
+            self.dlg = loginDialog()
         self.dlg.show()
-        # Run the dialog event loop
         result = self.dlg.exec_()
-        # See if OK was pressed
+
         if result:
-            # Do something useful here - delete the line containing pass and
-            # substitute with your code.
-            pass
+            if not self.pluginIsActive:
+                self.pluginIsActive = True
+                if self.dockwidget == None:
+                    self.dockwidget = toolWidget()
+                self.dockwidget.closingPlugin.connect(self.onClosePlugin)
+                self.iface.addDockWidget(Qt.LeftDockWidgetArea, self.dockwidget)
+                self.dockwidget.show()
+                #setting = QSettings('POP','auth')
+                #print(setting.value('jwt'))

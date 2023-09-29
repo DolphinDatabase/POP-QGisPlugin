@@ -26,17 +26,18 @@ import os
 
 from qgis.PyQt import uic
 from qgis.PyQt import QtWidgets
+from PyQt5.QtCore import QSettings
 import requests
 
 # This loads your .ui file so that PyQt can populate your plugin with the elements from Qt Designer
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
-    os.path.dirname(__file__), 'pop_dialog_base.ui'))
+    os.path.dirname(__file__), 'login_dialog.ui'))
 
 
-class POPDialog(QtWidgets.QDialog, FORM_CLASS):
+class loginDialog(QtWidgets.QDialog, FORM_CLASS):
     def __init__(self, parent=None):
         """Constructor."""
-        super(POPDialog, self).__init__(parent)
+        super(loginDialog, self).__init__(parent)
         # Set up the user interface from Designer through FORM_CLASS.
         # After self.setupUi() you can access any designer object by doing
         # self.<objectname>, and you can use autoconnect slots - see
@@ -75,7 +76,10 @@ class POPDialog(QtWidgets.QDialog, FORM_CLASS):
         })
         if res.status_code==200:
             token = res.json()['access_token']
-            print(token)
+            setting = QSettings('POP','auth')
+            setting.setValue('jwt',token)
+            self.close()
+            self.accept()
         else:
             self.lbl_error.setVisible(True)
             self.lbl_error.setStyleSheet("color: red;")
