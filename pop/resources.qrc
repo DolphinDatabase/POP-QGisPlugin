@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/plugins/pop" >
+        <file>icon.png</file>
+    </qresource>
+</RCC>
