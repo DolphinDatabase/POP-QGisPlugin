@@ -20,9 +20,9 @@
    <property name="geometry">
     <rect>
      <x>160</x>
-     <y>80</y>
+     <y>60</y>
      <width>311</width>
-     <height>130</height>
+     <height>133</height>
     </rect>
    </property>
    <layout class="QFormLayout" name="formLayout">
@@ -77,6 +77,13 @@
      <widget class="QLabel" name="lbl_password_error">
       <property name="text">
        <string/>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0" colspan="2">
+     <widget class="QCheckBox" name="chk_map">
+      <property name="text">
+       <string>Criar novo mapa?</string>
       </property>
      </widget>
     </item>

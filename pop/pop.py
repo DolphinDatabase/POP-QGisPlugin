@@ -24,7 +24,6 @@
 from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication, Qt
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction
-from qgis.core import QgsProject,QgsVectorLayer,QgsRasterLayer
 
 # Initialize Qt resources from file resources.py
 from .resources import *
@@ -34,7 +33,8 @@ from .interface.tool.tool_widget import toolWidget
 import os.path
 
 from PyQt5.QtCore import QSettings
-
+from qgis.core import QgsVectorLayer,QgsProject,QgsDataSourceUri
+from .tools.identify_gleba import identifyGleba
 
 class POP:
     """QGIS Plugin Implementation."""
@@ -66,7 +66,7 @@ class POP:
         self.first_start = None
         self.pluginIsActive = False
         self.dockwidget = None
-
+        self.layer = None
 
     # noinspection PyMethodMayBeStatic
     def tr(self, message):
@@ -171,7 +171,6 @@ class POP:
         # will be set False in run()
         self.first_start = True
 
-
     def unload(self):
         """Removes the plugin menu item and icon from QGIS GUI."""
         for action in self.actions:
@@ -188,17 +187,13 @@ class POP:
         self.first_start = True
         self.pluginIsActive = False
 
+    def handleCustomTool(self,custom_tool):
+        self.iface.mapCanvas().setMapTool(custom_tool)
 
     def run(self):
         """Run method that performs all the real work"""
 
         if self.first_start == True:
-            #url = "type=xyz&url=https://mt1.google.com/vt/lyrs%3Ds%26x%3D%7Bx%7D%26y%3D%7By%7D%26z%3D%7Bz%7D&zmax=18&zmin=0&http-header:referer="
-            #r_layer = QgsRasterLayer(url, 'POP-Map', 'wms')
-            #if r_layer.isValid():
-            #    QgsProject.instance().addMapLayer(r_layer)
-            #else:
-            #    print("layer invalid")
             self.first_start = False
             self.dlg = loginDialog()
         self.dlg.show()
@@ -207,8 +202,15 @@ class POP:
         if result:
             if not self.pluginIsActive:
                 self.pluginIsActive = True
+                uri = QgsDataSourceUri()
+                uri.setConnection("localhost", "5432", "pop", "postgres", "root")
+                uri.setDataSource("public", "glb_gleba", "glb_poligono")
+                layer = QgsVectorLayer(uri.uri(), "Glebas", "postgres")
+                QgsProject.instance().addMapLayer(layer)
                 if self.dockwidget == None:
-                    self.dockwidget = toolWidget()
+                    identify_tool = identifyGleba(self.iface.mapCanvas(), layer, "Identificar Glebas")
+                    self.dockwidget = toolWidget(custom_tools=[identify_tool])
+                self.dockwidget.customTool.connect(self.handleCustomTool)
                 self.dockwidget.closingPlugin.connect(self.onClosePlugin)
                 self.iface.addDockWidget(Qt.LeftDockWidgetArea, self.dockwidget)
                 self.dockwidget.show()
