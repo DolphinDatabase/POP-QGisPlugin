@@ -16,6 +16,7 @@ class detailDialog(QtWidgets.QDialog, FORM_CLASS):
         self.setupUi(self)
         self.loading()
         jwt = QSettings('POP','auth').value('jwt')
+        self.setWindowTitle(f"Operação #{opr}")
         req = requests.get(f"http://localhost:5050/operacao/{opr}",headers={
             "Authorization":f"Bearer {jwt}"
         })

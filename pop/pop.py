@@ -24,6 +24,8 @@
 from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication, Qt
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction
+from PyQt5.QtGui import QColor
+from qgis.core import QgsSymbol, QgsSingleSymbolRenderer
 
 # Initialize Qt resources from file resources.py
 from .resources import *
@@ -183,6 +185,8 @@ class POP:
         """Cleanup necessary items here when plugin dockwidget is closed"""
         self.dockwidget.closingPlugin.disconnect(self.onClosePlugin)
         QSettings('POP','auth').remove('jwt')
+        QgsProject.instance().removeMapLayer(self.layer.id())
+        self.iface.mapCanvas().setMapTool(None)
         self.dockwidget = None
         self.first_start = True
         self.pluginIsActive = False
@@ -205,8 +209,17 @@ class POP:
                 uri = QgsDataSourceUri()
                 uri.setConnection("localhost", "5432", "pop", "postgres", "root")
                 uri.setDataSource("public", "glb_gleba", "glb_poligono")
+                border_color = QColor(255, 255, 255, 100)
+                fill_color = QColor(255, 255, 255, 80)
                 layer = QgsVectorLayer(uri.uri(), "Glebas", "postgres")
                 QgsProject.instance().addMapLayer(layer)
+                symbol = QgsSymbol.defaultSymbol(layer.geometryType())
+                symbol.setColor(border_color) 
+                symbol.symbolLayer(0).setFillColor(fill_color)
+                renderer = QgsSingleSymbolRenderer(symbol)
+                layer.setRenderer(renderer)
+                layer.triggerRepaint()
+                self.layer = layer
                 if self.dockwidget == None:
                     identify_tool = identifyGleba(self.iface.mapCanvas(), layer, "Identificar Glebas")
                     self.dockwidget = toolWidget(custom_tools=[identify_tool])
@@ -214,5 +227,3 @@ class POP:
                 self.dockwidget.closingPlugin.connect(self.onClosePlugin)
                 self.iface.addDockWidget(Qt.LeftDockWidgetArea, self.dockwidget)
                 self.dockwidget.show()
-                #setting = QSettings('POP','auth')
-                #print(setting.value('jwt'))
