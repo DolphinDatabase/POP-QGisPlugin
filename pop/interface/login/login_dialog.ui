@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>POP</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../../public/Logo.png</normaloff>../../public/Logo.png</iconset>
+  </property>
   <property name="autoFillBackground">
    <bool>false</bool>
   </property>
@@ -113,6 +117,22 @@
    </property>
    <property name="text">
     <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>80</y>
+     <width>81</width>
+     <height>81</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap>../../public/Logo.png</pixmap>
    </property>
   </widget>
  </widget>
