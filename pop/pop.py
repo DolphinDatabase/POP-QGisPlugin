@@ -25,7 +25,7 @@ from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication, Qt
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction
 from PyQt5.QtGui import QColor
-from qgis.core import QgsSymbol, QgsSingleSymbolRenderer
+from qgis.core import QgsSymbol, QgsSingleSymbolRenderer, QgsLineSymbolLayer
 
 # Initialize Qt resources from file resources.py
 from .resources import *
@@ -209,13 +209,13 @@ class POP:
                 uri = QgsDataSourceUri()
                 uri.setConnection("localhost", "5432", "pop", "postgres", "root")
                 uri.setDataSource("public", "glb_gleba", "glb_poligono")
-                border_color = QColor(255, 255, 255, 100)
-                fill_color = QColor(255, 255, 255, 80)
+
                 layer = QgsVectorLayer(uri.uri(), "Glebas", "postgres")
                 QgsProject.instance().addMapLayer(layer)
                 symbol = QgsSymbol.defaultSymbol(layer.geometryType())
-                symbol.setColor(border_color) 
-                symbol.symbolLayer(0).setFillColor(fill_color)
+                symbol.symbolLayer(0).setFillColor(QColor(255, 255, 255, 100))
+                symbol.symbolLayer(0).setStrokeColor(QColor(255, 255, 255, 100))
+                symbol.symbolLayer(0).setStrokeWidth(2.0)
                 renderer = QgsSingleSymbolRenderer(symbol)
                 layer.setRenderer(renderer)
                 layer.triggerRepaint()
