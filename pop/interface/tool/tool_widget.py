@@ -22,9 +22,8 @@ class toolWidget(QtWidgets.QDockWidget, FORM_CLASS):
             tool_button = QToolButton()
             tool_button.setText(tool.label)
             tool_button.clicked.connect(lambda: self.handleChoosetool(custom_tool=tool))
-            grid_layout = self.gridLayout
-            row_position = grid_layout.rowCount()
-            grid_layout.addWidget(tool_button, row_position, i)
+            grid_layout = self.verticalLayout
+            grid_layout.addWidget(tool_button)
 
 
     def closeEvent(self, event):
