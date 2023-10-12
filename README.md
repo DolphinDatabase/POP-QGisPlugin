@@ -20,6 +20,4 @@ Once logged in, a new layer with the plots will be created.
 
 A dockwidget in the lower left corner of the screen will show the tools of the pulgin:
 
-![image](https://github.com/DolphinDatabase/POP-QGisPlugin/assets/58821700/2b72bddd-3018-4181-afd6-c11113a439b4)
-
- - Identify Plots: identifies the operation, enterprise, and cultivation data
+ - 'Identificar glebas': identifies the operation, enterprise, and cultivation data
