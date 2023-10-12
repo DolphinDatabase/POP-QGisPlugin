@@ -4,4 +4,12 @@ Mapping of the plots registered in [Proagro](https://www.gov.br/agricultura/pt-b
 
 ## Installation
 
-In Qgis, go to Plugins >> Manage and Install plugins >> Configuration, in Plugin Repositories section, click in 'Add...' and in 'URL', type the plugin url:
+In Qgis, go to 
+
+<b>Plugins >> Manage and Install plugins >> Configuration</b>
+
+in Plugin Repositories section, click in 'Add...' and in 'URL', type the plugin url:
+
+```
+https://github.com/DolphinDatabase/POP-QGisPlugin/tree/main/pop
+```
