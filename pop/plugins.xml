@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugins>
+    <pyqgis_plugin>
+        <name>POP</name>
+        <version>1.0.0</version>
+        <description>Your plugin description goes here.</description>
+        <qgis_minimum_version>1.0</qgis_minimum_version>
+        <author>Dolphin Database</author>
+        <email>dolphin.dbfatec@gmail.com</email>
+        <repository_name>POP-QGisPlugin</repository_name>
+        <experimental>True</experimental>
+    </pyqgis_plugin>
+</plugins>
