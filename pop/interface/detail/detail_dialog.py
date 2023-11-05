@@ -26,7 +26,7 @@ class detailDialog(QtWidgets.QDialog, FORM_CLASS):
         })
         if req.status_code==200:
             inicio = inicio.addDays(-30)
-            fim = fim.addDays(30)
+            fim = fim.addDays(60)
             time_series = requests.get(f'http://localhost:5000/time_series?gleba={gleba}&inicio={inicio.toString("yyyy-MM-dd")}&fim={fim.toString("yyyy-MM-dd")}')
             if time_series.status_code == 200:
                 data = time_series.json()['data']
