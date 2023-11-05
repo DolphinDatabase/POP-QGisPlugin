@@ -25,7 +25,7 @@ from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication, Qt
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction
 from PyQt5.QtGui import QColor
-from qgis.core import QgsSymbol, QgsSingleSymbolRenderer, QgsLineSymbolLayer
+from qgis.core import QgsSymbol, QgsSingleSymbolRenderer, QgsVectorLayer,QgsProject,QgsDataSourceUri
 
 # Initialize Qt resources from file resources.py
 from .resources import *
@@ -34,8 +34,6 @@ from .interface.login.login_dialog import loginDialog
 from .interface.tool.tool_widget import toolWidget
 import os.path
 
-from PyQt5.QtCore import QSettings
-from qgis.core import QgsVectorLayer,QgsProject,QgsDataSourceUri
 from .tools.identify_gleba import identifyGleba
 
 class POP:
@@ -207,9 +205,24 @@ class POP:
             if not self.pluginIsActive:
                 self.pluginIsActive = True
                 uri = QgsDataSourceUri()
-                uri.setConnection("localhost", "5432", "pop", "postgres", "root")
-                uri.setDataSource("public", "glb_gleba", "glb_poligono")
-
+                uri.setConnection("localhost", "5432", "postgres", "postgres", "root")
+                query = '''select opr.opr_inicio_plantio as inicio_plantio, 
+                    opr.opr_fim_plantio as fim_plantio, 
+                    opr.opr_inicio_colheita as inicio_colheita, 
+                    opr.opr_fim_colheita as fim_colheita, 
+                    mun.mun_descricao as municipio, 
+                    std.std_descricao as estado, 
+                    glb.glb_poligono as gleba, 
+                    opr.opr_id as id_operacao, 
+                    glb.glb_id as id_gleba 
+                    from opr_operacao as opr 
+                    inner join mun_municipio as mun 
+                    on mun.mun_id = opr.mun_id
+                    inner join std_estado as std 
+                    on std.std_id = opr.std_id 
+                    inner join glb_gleba as glb 
+                    on glb.opr_id = opr.opr_id'''
+                uri.setDataSource('', f'({query})', 'gleba','','id_gleba')
                 layer = QgsVectorLayer(uri.uri(), "Glebas", "postgres")
                 QgsProject.instance().addMapLayer(layer)
                 symbol = QgsSymbol.defaultSymbol(layer.geometryType())
