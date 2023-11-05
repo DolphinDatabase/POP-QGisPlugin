@@ -10,19 +10,19 @@
     <x>0</x>
     <y>0</y>
     <width>681</width>
-    <height>380</height>
+    <height>780</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>681</width>
-    <height>380</height>
+    <height>780</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>681</width>
-    <height>380</height>
+    <height>780</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -34,19 +34,19 @@
      <x>0</x>
      <y>0</y>
      <width>681</width>
-     <height>380</height>
+     <height>460</height>
     </rect>
    </property>
    <property name="minimumSize">
     <size>
      <width>681</width>
-     <height>380</height>
+     <height>460</height>
     </size>
    </property>
    <property name="maximumSize">
     <size>
      <width>530</width>
-     <height>380</height>
+     <height>460</height>
     </size>
    </property>
    <property name="font">
@@ -65,7 +65,7 @@
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>0</y>
+     <y>10</y>
      <width>681</width>
      <height>380</height>
     </rect>
@@ -87,6 +87,9 @@
    </property>
    <property name="frameShadow">
     <enum>QFrame::Raised</enum>
+   </property>
+   <property name="lineWidth">
+    <number>0</number>
    </property>
    <widget class="QWidget" name="gridLayoutWidget_4">
     <property name="geometry">
@@ -570,6 +573,38 @@
      </item>
     </layout>
    </widget>
+  </widget>
+  <widget class="QLabel" name="lbl_message_time_series">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>400</y>
+     <width>681</width>
+     <height>369</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>18</pointsize>
+    </font>
+   </property>
+   <property name="lineWidth">
+    <number>0</number>
+   </property>
+   <property name="text">
+    <string>No Time Series</string>
+   </property>
+  </widget>
+  <widget class="QWidget" name="verticalLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>400</y>
+     <width>681</width>
+     <height>371</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="lytChart"/>
   </widget>
  </widget>
  <resources/>
