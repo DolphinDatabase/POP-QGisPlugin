@@ -16,7 +16,7 @@ class identifyGleba(mapTool):
         results = self.map_tool.identify(x,y,[self.layer],True)
         for item in results:
             feature = item.mFeature
-            dlg = detailDialog(opr=feature[1])
+            dlg = detailDialog(opr=feature[6],gleba=feature[7],inicio=feature[1],fim=feature[3])
             dlg.show()
             result = dlg.exec_()
             
