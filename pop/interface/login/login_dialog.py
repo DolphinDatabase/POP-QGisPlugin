@@ -5,6 +5,7 @@ from qgis.PyQt import QtWidgets
 from PyQt5.QtCore import QSettings
 import requests
 from qgis.core import QgsProject,QgsRasterLayer
+from ..termo.termo_dialog import termoDialog
 
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
     os.path.dirname(__file__), 'login_dialog.ui'))
@@ -27,7 +28,41 @@ class loginDialog(QtWidgets.QDialog, FORM_CLASS):
 
     def resetPassword(self, event):
         self.lbl_password_error.setVisible(False)
-    
+
+    def post_login(self,token):
+        if self.chk_map.isChecked():
+            url = "type=xyz&url=https://mt1.google.com/vt/lyrs%3Ds%26x%3D%7Bx%7D%26y%3D%7By%7D%26z%3D%7Bz%7D&zmax=18&zmin=0&http-header:referer="
+            r_layer = QgsRasterLayer(url, 'POP-Map', 'wms')
+            if r_layer.isValid():
+                QgsProject.instance().addMapLayer(r_layer)
+            else:
+                print("layer invalid")
+        setting = QSettings('POP','auth')
+        setting.setValue('jwt',token)
+        self.close()
+        self.accept()
+
+    def login(self,email,senha):
+        res = requests.post("http://localhost:5050/auth",data={
+            'username':email,
+            'password':senha
+        })
+        if res.status_code==200:
+            token = res.json()['access_token']
+            res = requests.get("http://localhost:5050/auth",headers={"Authorization":f"Bearer {token}"})
+            if res.status_code == 200:
+                self.post_login(token)
+            else:
+                termo_dlg = termoDialog(token)
+                termo_dlg.show()
+                result = termo_dlg.exec_()
+                self.login(email,senha)
+        else:
+            self.lbl_error.setVisible(True)
+            self.lbl_error.setStyleSheet("color: red;")
+            self.lbl_error.setText("Dados Inválidos!")
+            return
+
     def handle_button(self):
         email = self.txt_email.text()
         senha = self.txt_password.text()
@@ -41,26 +76,5 @@ class loginDialog(QtWidgets.QDialog, FORM_CLASS):
                 self.lbl_password_error.setStyleSheet("color: red;")
                 self.lbl_password_error.setText("Preencha a senha")
             return
-        res = requests.post("http://localhost:5050/auth",data={
-            'username':email,
-            'password':senha
-        })
-        if res.status_code==200:
-            token = res.json()['access_token']
-            setting = QSettings('POP','auth')
-            setting.setValue('jwt',token)
-            if self.chk_map.isChecked():
-                url = "type=xyz&url=https://mt1.google.com/vt/lyrs%3Ds%26x%3D%7Bx%7D%26y%3D%7By%7D%26z%3D%7Bz%7D&zmax=18&zmin=0&http-header:referer="
-                r_layer = QgsRasterLayer(url, 'POP-Map', 'wms')
-                if r_layer.isValid():
-                    QgsProject.instance().addMapLayer(r_layer)
-                else:
-                    print("layer invalid")
-            self.close()
-            self.accept()
-        else:
-            self.lbl_error.setVisible(True)
-            self.lbl_error.setStyleSheet("color: red;")
-            self.lbl_error.setText("Dados Inválidos!")
-            return
+        self.login(email,senha)
         
