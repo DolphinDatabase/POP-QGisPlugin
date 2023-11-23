@@ -46,6 +46,7 @@ class detailDialog(QtWidgets.QDialog, FORM_CLASS):
                 fig, ax=plt.subplots(figsize=(9, 4))
                 df['NDVI'].plot(ax=ax, label='NDVI')
                 df['Predição'].plot(ax=ax, label='Predição', color='green')
+                ax.legend()
                 with open(f'/tmp/{gleba}.png','wb') as img:
                     fig.savefig(buffer, format='png')
                     img.write(buffer.getvalue())
@@ -53,6 +54,25 @@ class detailDialog(QtWidgets.QDialog, FORM_CLASS):
                 canvas = FigureCanvas(fig)
                 self.lytChart.addWidget(canvas)
                 canvas.draw()
+
+                weather = time_series.json()['weather']
+                weather_df = pd.DataFrame(weather)
+                weather_df.index = pd.to_datetime(weather_df.index, unit='ms').strftime('%Y-%m-%d %H:%M:%S')
+                fig, ax  = plt.subplots(figsize=(9, 4))
+                weather_df['temp'].plot(ax=ax,label='Temperatura')
+                weather_df['pressure'].plot(ax=ax,label='Pressão')
+                weather_df['humidity'].plot(ax=ax,label='Humidade')
+                weather_df['wind_speed'].plot(ax=ax,label='Velocidade do Vento')
+                weather_df['clouds'].plot(ax=ax,label='Nuvem')
+                ax.legend()
+                with open(f'/tmp/{gleba}_weather.png','wb') as img:
+                    fig.savefig(buffer, format='png')
+                    img.write(buffer.getvalue())
+                buffer.seek(0)
+                canvas = FigureCanvas(fig)
+                self.lytWeather.addWidget(canvas)
+                canvas.draw()
+
                 self.lbl_message_time_series.setVisible(False)
             else:
                 self.setMinimumSize(681, 460)
@@ -126,13 +146,15 @@ class detailDialog(QtWidgets.QDialog, FORM_CLASS):
         c.drawString(10, 540, f'Atividade: {opr["empreendimento"]["atividade"]}')
         c.drawString(10, 528, f'Finalidade: {opr["empreendimento"]["finalidade"]}')
         
-        if os.path.exists(f'/tmp/{gleba}.png'):
+        if os.path.exists(f'/tmp/{gleba}.png') and os.path.exists(f'/tmp/{gleba}_weather.png'):
             c.showPage()
             c.drawImage(f'/tmp/{gleba}.png', 10, 500, width=500, height=300)
+            c.drawImage(f'/tmp/{gleba}_weather.png', 10, 180, width=500, height=300)
             os.remove(f'/tmp/{gleba}.png')
+            os.remove(f'/tmp/{gleba}_weather.png')
         c.save()
         dir_selected = QFileDialog.getExistingDirectory(None, "Selecionar diretório", "", QFileDialog.ShowDirsOnly)
         if dir_selected:
             print("Diretório selecionado:", dir_selected)
-            with open(f'Report_glb{gleba}.pdf', 'wb') as f:
+            with open(f'{dir_selected}/Report_glb{gleba}.pdf', 'wb') as f:
                 f.write(pdf_buffer.getvalue())
