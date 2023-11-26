@@ -9,20 +9,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>681</width>
-    <height>780</height>
+    <width>1200</width>
+    <height>820</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>681</width>
+    <width>1200</width>
     <height>780</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>681</width>
-    <height>780</height>
+    <width>1200</width>
+    <height>820</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -33,20 +33,20 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>681</width>
-     <height>460</height>
+     <width>1200</width>
+     <height>380</height>
     </rect>
    </property>
    <property name="minimumSize">
     <size>
-     <width>681</width>
-     <height>460</height>
+     <width>1200</width>
+     <height>380</height>
     </size>
    </property>
    <property name="maximumSize">
     <size>
-     <width>530</width>
-     <height>460</height>
+     <width>1200</width>
+     <height>380</height>
     </size>
    </property>
    <property name="font">
@@ -66,19 +66,19 @@
     <rect>
      <x>0</x>
      <y>10</y>
-     <width>681</width>
+     <width>1200</width>
      <height>380</height>
     </rect>
    </property>
    <property name="minimumSize">
     <size>
-     <width>681</width>
+     <width>1200</width>
      <height>380</height>
     </size>
    </property>
    <property name="maximumSize">
     <size>
-     <width>681</width>
+     <width>1200</width>
      <height>380</height>
     </size>
    </property>
@@ -244,7 +244,7 @@
    <widget class="QWidget" name="gridLayoutWidget_5">
     <property name="geometry">
      <rect>
-      <x>320</x>
+      <x>850</x>
       <y>10</y>
       <width>341</width>
       <height>271</height>
@@ -436,22 +436,15 @@
    <widget class="QWidget" name="gridLayoutWidget_6">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>190</y>
-      <width>291</width>
+      <x>390</x>
+      <y>10</y>
+      <width>344</width>
       <height>171</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="lyt_sistema_2">
-     <item row="2" column="1">
-      <widget class="QLabel" name="lbl_irrigacao_2">
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="1">
-      <widget class="QLabel" name="lbl_cultivo_2">
+     <item row="4" column="1">
+      <widget class="QLabel" name="lbl_grao_semente_2">
        <property name="text">
         <string/>
        </property>
@@ -473,10 +466,19 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="1">
-      <widget class="QLabel" name="lbl_grao_semente_2">
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_12">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
        <property name="text">
-        <string/>
+        <string>Tipo Solo:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
       </widget>
      </item>
@@ -500,29 +502,6 @@
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_12">
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Tipo Solo:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="1">
-      <widget class="QLabel" name="lbl_ciclo_2">
-       <property name="text">
-        <string/>
        </property>
       </widget>
      </item>
@@ -558,6 +537,27 @@
        </property>
       </widget>
      </item>
+     <item row="2" column="1">
+      <widget class="QLabel" name="lbl_irrigacao_2">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLabel" name="lbl_cultivo_2">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1">
+      <widget class="QLabel" name="lbl_ciclo_2">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
      <item row="0" column="0" colspan="2">
       <widget class="QLabel" name="label_37">
        <property name="font">
@@ -577,9 +577,9 @@
   <widget class="QLabel" name="lbl_message_time_series">
    <property name="geometry">
     <rect>
-     <x>0</x>
+     <x>30</x>
      <y>400</y>
-     <width>681</width>
+     <width>1151</width>
      <height>369</height>
     </rect>
    </property>
@@ -600,11 +600,39 @@
     <rect>
      <x>0</x>
      <y>400</y>
-     <width>681</width>
+     <width>631</width>
      <height>371</height>
     </rect>
    </property>
-   <layout class="QVBoxLayout" name="lytChart"/>
+   <layout class="QVBoxLayout" name="lytChart">
+    <property name="leftMargin">
+     <number>8</number>
+    </property>
+   </layout>
+  </widget>
+  <widget class="QPushButton" name="btn_download">
+   <property name="geometry">
+    <rect>
+     <x>1060</x>
+     <y>780</y>
+     <width>120</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Download PDF</string>
+   </property>
+  </widget>
+  <widget class="QWidget" name="verticalLayoutWidget_2">
+   <property name="geometry">
+    <rect>
+     <x>640</x>
+     <y>400</y>
+     <width>541</width>
+     <height>371</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="lytWeather"/>
   </widget>
  </widget>
  <resources/>
